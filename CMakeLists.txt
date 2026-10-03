@@ -5,6 +5,14 @@ if(CMAKE_CROSSCOMPILING)
     add_library(stub STATIC tests/target/stub.c)
 else()
     add_executable(hello tests/host/hello.c)
+    add_library(unity STATIC third_party/Unity/unity.c)
+    target_include_directories(unity PUBLIC third_party/Unity)
+
+    add_executable(unit_tests tests/host/test_example.c)
+    target_link_libraries(unit_tests unity)
+
+    enable_testing()
+    add_test(NAME unit_tests COMMAND unit_tests)
 endif()
 
 find_program(CPPCHECK_EXE cppcheck)
